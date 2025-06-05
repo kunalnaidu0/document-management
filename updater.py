@@ -6,11 +6,9 @@ import webbrowser
 from PySide6.QtWidgets import QMessageBox
 import subprocess
 import shutil
+from version import __version__ as APP_VERSION
 
 
-
-# Your app's current version
-APP_VERSION = "0.0.1"
 
 # Replace with your actual GitHub username and repo
 GITHUB_USERNAME = "kunalnaidu0"
