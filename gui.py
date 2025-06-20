@@ -12,6 +12,8 @@ from updater import check_for_update, download_update, launch_update
 
 from PySide6.QtCore import QTimer
 
+import os
+
 class Gui(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -35,6 +37,9 @@ class Gui(QMainWindow):
 
         # Run update check 1 second after window shows (to avoid startup lag)
         QTimer.singleShot(1000, self.check_for_updates_silent)
+
+        # Check if the update was successful
+        self.check_update_success_flag()
 
     def detect_system_dark_mode(self):
         """
@@ -334,6 +339,12 @@ class Gui(QMainWindow):
         
         # Show success message
         QMessageBox.information(self, "Submitted", f"File submitted for date: {date}")
+
+    def check_update_success_flag(self):
+        flag_path = os.path.join(os.path.dirname(sys.argv[0]), "update_success.flag")
+        if os.path.exists(flag_path):
+            QMessageBox.information(self, "Update Complete", "The application was successfully updated.")
+            os.remove(flag_path)
 
 
 

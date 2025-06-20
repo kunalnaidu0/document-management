@@ -65,28 +65,16 @@ def download_update():
         print("Error downloading update:", e)
     return None
 
-def launch_update(file_path):
+def launch_update(downloaded_file):
     """
-    Launch the update process by copying the new file and restarting the application.
-    Args:
-        file_path (str): The path to the downloaded update file.
+    Launch a separate Python updater to replace the current executable.
     """
     current_exe = sys.argv[0]
+    update_script = os.path.join(os.path.dirname(current_exe), "update_runner.py")
 
-    # Creates a temporary updater script to handle the update process
-    updater_script = os.path.join(tempfile.gettempdir(), "update_helper.bat")
-
-    with open(updater_script, "w") as f:
-        f.write(f"""@echo off
-                timeout /t 2 /nobreak > NUL
-                copy /Y "{file_path}" "{current_exe}"
-                start "" "{current_exe}"
-                del "{updater_script}"
-                """)
-    
-    # Run the updater script
-    subprocess.Popen(['cmd', '/c', updater_script])
-    # exit the current application
+    subprocess.Popen([
+        sys.executable, update_script, current_exe, downloaded_file
+    ])
     sys.exit()
 
 # test function
